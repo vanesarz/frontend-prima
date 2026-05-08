@@ -1,12 +1,13 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 
 const menu = [
-  { name: "Beranda", path: "/dashboard" },
+  { name: "Beranda", path: "/" },
   { name: "Cari Dokter", path: "/directory" },
   { name: "Rekam Medis", path: "/records" },
   { name: "AI Asisten", path: "/consultation" },
@@ -20,9 +21,17 @@ export default function Navbar() {
     <header className="sticky top-0 z-50 bg-[#FFFBF5] border-b px-6 md:px-10 py-4">
       <div className="flex justify-between items-center max-w-7xl mx-auto">
         {/* LOGO */}
-        <h1 className="text-2xl font-black text-[#FF6B6B]">
-          MediCare+
-        </h1>
+        <Link href="/">
+          <div className="relative w-30 h-12 overflow-hidden">
+            <Image
+              src="/logo-prima.svg"
+              alt="PRIMA Logo"
+              fill
+              priority
+              className="object-cover"
+            />
+          </div>
+        </Link>
 
         {/* DESKTOP MENU */}
         <nav className="hidden md:flex gap-8 font-semibold">

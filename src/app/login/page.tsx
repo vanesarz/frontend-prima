@@ -27,7 +27,7 @@ export default function LandingPage() {
       {/* NAVBAR */}
       <header className="sticky top-0 z-50 bg-[#FFFBF5] border-b px-8 py-4 flex justify-between items-center">
         <h1 className="text-2xl font-black text-[#FF6B6B]">
-          MediCare+
+          PRIMA
         </h1>
 
         <nav className="hidden md:flex gap-8 font-semibold">
@@ -145,11 +145,11 @@ export default function LandingPage() {
       <footer className="bg-white px-8 py-10 border-t">
         <div className="flex justify-between">
           <h3 className="font-bold text-[#FF6B6B]">
-            MediCare+
+            PRIMA
           </h3>
 
           <p className="text-gray-400 text-sm">
-            © 2026 MediCare+
+            © 2026 PRIMA
           </p>
         </div>
       </footer>

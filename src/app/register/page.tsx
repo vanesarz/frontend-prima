@@ -1,36 +1,13 @@
 "use client";
 
+import { Navbar} from '@/components';
 import Image from "next/image";
 import Link from "next/link";
 
 export default function RegisterPage() {
   return (
     <div className="bg-[#FFFBF5] min-h-screen text-gray-800">
-      {/* NAVBAR */}
-      <nav className="sticky top-0 z-50 bg-[#FFFBF5] border-b px-8 py-4 flex justify-between items-center">
-        <h1 className="text-2xl font-black text-[#FF6B6B]">
-          MediCare+
-        </h1>
-
-        <div className="hidden md:flex gap-8 items-center font-semibold">
-          <Link href="/" className="hover:text-[#FF6B6B]">
-            Beranda
-          </Link>
-          <Link href="/directory" className="hover:text-[#FF6B6B]">
-            Cari Dokter
-          </Link>
-          <Link href="/consultation" className="hover:text-[#FF6B6B]">
-            AI Asisten
-          </Link>
-
-          <Link
-            href="/login"
-            className="bg-[#FF6B6B] text-white px-6 py-2 rounded-full text-sm"
-          >
-            Masuk
-          </Link>
-        </div>
-      </nav>
+      <Navbar />
 
       {/* MAIN */}
       <main className="max-w-7xl mx-auto px-8 py-20 flex flex-col items-center text-center">
@@ -40,7 +17,7 @@ export default function RegisterPage() {
             Mulai perjalanan sehatmu! ✨
           </h1>
           <p className="text-gray-500">
-            Pilih cara kamu bergabung dengan MediCare+
+            Pilih cara kamu bergabung dengan PRIMA
           </p>
         </div>
 
@@ -117,10 +94,10 @@ export default function RegisterPage() {
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
           <div>
             <h3 className="font-bold text-[#4ECDC4]">
-              MediCare+
+              PRIMA
             </h3>
             <p className="text-sm text-gray-400">
-              © 2026 MediCare+
+              © 2026 PRIMA
             </p>
           </div>
 
