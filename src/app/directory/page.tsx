@@ -1,250 +1,590 @@
 "use client";
 
-import Sidebar from "@/components/Sidebar";
 import Image from "next/image";
-import { Search, MapPin, Star, Calendar } from "lucide-react";
+import Link from "next/link";
 
-/* TYPES */
+import {
+  Navbar,
+  Footer,
+} from "@/components";
+
+import {
+  useEffect,
+  useState,
+} from "react";
+
+/* =========================
+   TYPES
+========================= */
+
 type Doctor = {
+  id: string | number;
+
   name: string;
-  specialty: string;
-  location: string;
-  rating: number;
-  price: string;
-  availability: string;
-  image: string;
+
+  spesialisasi: string;
+
+  deskripsi_profil: string;
+
+  rating?: string;
+
+  reviews?: string;
+
+  availability?: string;
+
+  foto_profil_url?: string;
 };
 
-/* DATA */
-const doctors: Doctor[] = [
+/* =========================
+   DUMMY DATA
+========================= */
+
+const dummyDoctors: Doctor[] = [
   {
-    name: "Dr. Sarah Jenkins",
-    specialty: "Cardiology",
-    location: "Upper West Side, NY",
-    rating: 4.9,
-    price: "$150/visit",
-    availability: "Available tomorrow",
-    image: "https://via.placeholder.com/300x180",
+    id: 1,
+
+    name: "Dr. Sarah Larasati",
+
+    spesialisasi:
+      "Spesialis Anak",
+
+    deskripsi_profil:
+      "Dokter anak yang sangat ramah dan sabar, memiliki pengalaman lebih dari 8 tahun di RS Bunda.",
+
+    rating: "4.9",
+
+    reviews: "120 Ulasan",
+
+    availability:
+      "Tersedia Hari Ini",
+
+    foto_profil_url:
+      "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?q=80&w=1200&auto=format&fit=crop",
   },
+
   {
-    name: "Dr. Michael Chen",
-    specialty: "Pediatrics",
-    location: "Brooklyn Heights, NY",
-    rating: 4.8,
-    price: "$120/visit",
-    availability: "Next: Friday",
-    image: "https://via.placeholder.com/300x180",
+    id: 2,
+
+    name: "Dr. Budi Santoso",
+
+    spesialisasi:
+      "Dokter Umum",
+
+    deskripsi_profil:
+      "Berpengalaman menangani konsultasi kesehatan harian dan pemeriksaan medis umum.",
+
+    rating: "4.8",
+
+    reviews: "85 Ulasan",
+
+    availability:
+      "Tersedia Besok",
+
+    foto_profil_url:
+      "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?q=80&w=1200&auto=format&fit=crop",
   },
+
   {
-    name: "Dr. Elena Rodriguez",
-    specialty: "Dermatology",
-    location: "Manhattan, NY",
-    rating: 5.0,
-    price: "$200/visit",
-    availability: "Available today",
-    image: "https://via.placeholder.com/300x180",
+    id: 3,
+
+    name: "Dr. Maya Pradipta",
+
+    spesialisasi:
+      "Psikolog Klinis",
+
+    deskripsi_profil:
+      "Fokus pada manajemen stres, kecemasan, dan kesehatan mental dewasa muda.",
+
+    rating: "5.0",
+
+    reviews: "200+ Ulasan",
+
+    availability:
+      "Konsultasi Online",
+
+    foto_profil_url:
+      "https://images.unsplash.com/photo-1594824476967-48c8b964273f?q=80&w=1200&auto=format&fit=crop",
   },
 ];
 
+/* =========================
+   FILTERS
+========================= */
+
+const filters = [
+  "Semua",
+
+  "Umum",
+
+  "Spesialis",
+
+  "Tersedia Hari Ini",
+
+  "Dekat Saya",
+
+  "Konsultasi Online",
+];
+
+/* =========================
+   PAGE
+========================= */
+
 export default function DirectoryPage() {
+  const [activeFilter, setActiveFilter] =
+    useState("Semua");
+
+  const [search, setSearch] =
+    useState("");
+
+  const [loading, setLoading] =
+    useState(false);
+
+  const [error, setError] =
+    useState("");
+
+  /* =========================
+     DATA
+  ========================= */
+
+  const [apiDoctors, setApiDoctors] =
+    useState<Doctor[]>([]);
+
+  const [doctors, setDoctors] =
+    useState<Doctor[]>(dummyDoctors);
+
+  /* =========================
+     FETCH API
+  ========================= */
+
+  useEffect(() => {
+    const fetchDoctors = async () => {
+      try {
+        setLoading(true);
+
+        setError("");
+
+        const response = await fetch(
+          "https://backend-prima.vercel.app/doctors"
+        );
+
+        const result =
+          await response.json();
+
+        console.log(
+          "API Doctors:",
+          result
+        );
+
+        if (
+          Array.isArray(result) &&
+          result.length > 0
+        ) {
+          const mappedDoctors =
+            result.map(
+              (
+                doctor: Record<
+                  string,
+                  unknown
+                >
+              ): Doctor => ({
+                id:
+                  doctor.id?.toString() ||
+                  Math.random().toString(),
+
+                name: String(
+                  doctor.name ??
+                    "Nama dokter"
+                ),
+
+                spesialisasi:
+                  String(
+                    doctor.spesialisasi ??
+                      "Dokter"
+                  ),
+
+                deskripsi_profil:
+                  String(
+                    doctor.deskripsi_profil ??
+                      "Belum ada deskripsi."
+                  ),
+
+                rating: String(
+                  doctor.rating ??
+                    "4.9"
+                ),
+
+                reviews: String(
+                  doctor.reviews ??
+                    "100 Ulasan"
+                ),
+
+                availability:
+                  String(
+                    doctor.availability ??
+                      "Tersedia"
+                  ),
+
+                foto_profil_url:
+                  String(
+                    doctor.foto_profil_url ??
+                      "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?q=80&w=1200&auto=format&fit=crop"
+                  ),
+              })
+            );
+
+          setApiDoctors(
+            mappedDoctors
+          );
+
+          setDoctors(
+            mappedDoctors
+          );
+        } else {
+          setDoctors(
+            dummyDoctors
+          );
+        }
+      } catch (err) {
+        console.error(err);
+
+        setError(
+          "Gagal mengambil data dokter"
+        );
+
+        setDoctors(
+          dummyDoctors
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDoctors();
+  }, []);
+
+  /* =========================
+     SEARCH FILTER
+  ========================= */
+
+  const filteredDoctors =
+    doctors.filter((doctor) => {
+      const keyword =
+        search.toLowerCase();
+
+      return (
+        doctor.name
+          .toLowerCase()
+          .includes(keyword) ||
+
+        doctor.spesialisasi
+          .toLowerCase()
+          .includes(keyword) ||
+
+        doctor.deskripsi_profil
+          .toLowerCase()
+          .includes(keyword)
+      );
+    });
+
   return (
-    <div className="flex bg-[#F1F5F9] min-h-screen">
-      <Sidebar />
+    <main className="min-h-screen bg-[#FDF8F8] flex flex-col">
+      <Navbar />
 
-      <main className="flex-1 p-8 space-y-6">
-        {/* HEADER */}
-        <div className="space-y-2">
-          <h2 className="text-3xl font-semibold">Provider Directory</h2>
-          <p className="text-gray-500 max-w-xl text-sm">
-            Find and schedule appointments with top-rated medical specialists curated for your health needs.
-          </p>
-        </div>
+      {/* CONTENT */}
+      <section className="flex-1 px-8 py-14">
+        <div className="max-w-7xl mx-auto">
+          {/* TITLE */}
+          <div className="mb-6">
+            <h1
+              className="
+                text-4xl
+                font-black
+                text-[#2A1717]
+                leading-tight
+              "
+            >
+              Dokter terbaik buat kamu
+              🧑‍⚕️
+            </h1>
 
-        {/* SEARCH + FILTER */}
-        <div className="flex gap-4 flex-wrap">
-          <div className="flex items-center bg-white px-4 py-3 rounded-xl shadow-sm w-75">
-            <Search size={18} className="text-gray-400" />
+            <p className="mt-4 text-gray-500 text-base">
+              {apiDoctors.length > 0
+                ? "Menggunakan data dari API"
+                : "Menggunakan dummy data"}
+            </p>
+          </div>
+
+          {/* SEARCH */}
+          <div
+            className="
+              w-full
+              max-w-4xl
+              flex
+              items-center
+              bg-white
+              border-2
+              border-[#E9C9C9]
+              rounded-full
+              overflow-hidden
+              shadow-sm
+            "
+          >
+            <div className="px-6 text-[#D0A7A7] text-lg">
+              🔍
+            </div>
+
             <input
-              placeholder="Search by name or specialty..."
-              className="ml-2 outline-none w-full text-sm"
-            />
-          </div>
-
-          <Filter label="Specialty: All Specialties" />
-          <Filter label="Rating: 4.5+ Stars" />
-          <Filter label="Location: Within 10 miles" />
-        </div>
-
-        {/* DOCTORS */}
-        <div className="grid grid-cols-3 gap-6">
-          {doctors.map((doc, i) => (
-            <DoctorCard key={i} {...doc} />
-          ))}
-        </div>
-
-        {/* FEATURE + SUPPORT */}
-        <div className="grid grid-cols-3 gap-6">
-          {/* FEATURE */}
-          <div className="col-span-2 bg-white rounded-2xl p-6 shadow-sm flex gap-6">
-            <Image
-              src="https://via.placeholder.com/220x180"
-              alt="Dr. Jonathan Vance"
-              width={220}
-              height={180}
-              className="rounded-xl object-cover"
+              type="text"
+              placeholder="Ketik nama dokter, spesialisasi, atau gejala..."
+              value={search}
+              onChange={(e) =>
+                setSearch(
+                  e.target.value
+                )
+              }
+              className="
+                flex-1
+                py-5
+                bg-transparent
+                outline-none
+                text-base
+                text-[#4B3434]
+                placeholder:text-[#B69494]
+              "
             />
 
-            <div className="flex flex-col justify-between">
-              <div>
-                <p className="text-xs text-gray-400 uppercase">Neurology</p>
-                <h3 className="text-xl font-semibold">
-                  Dr. Jonathan Vance
-                </h3>
-
-                <div className="flex items-center gap-4 text-sm text-gray-500 mt-2">
-                  <span className="flex items-center gap-1">
-                    <MapPin size={14} /> Medical Center
-                  </span>
-                  <span>Johns Hopkins Alumni</span>
-                </div>
-
-                <p className="text-sm text-gray-500 mt-3 max-w-md">
-                  Focusing on patient-centered neurological care through innovative treatment plans.
-                </p>
-              </div>
-
-              <button className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg w-fit">
-                Book Appointment
-              </button>
-            </div>
-          </div>
-
-          {/* SUPPORT */}
-          <div className="bg-white rounded-2xl p-6 shadow-sm flex flex-col justify-between">
-            <div>
-              <h3 className="font-semibold text-lg">
-                Can&apos;t find a specialist?
-              </h3>
-              <p className="text-sm text-gray-500 mt-2">
-                Our team can help you find the right provider based on your needs.
-              </p>
-            </div>
-
-            <button className="text-blue-600 mt-4 text-sm">
-              Chat with Support →
+            <button
+              className="
+                bg-[#FF6B6B]
+                hover:bg-[#ff5a5a]
+                text-white
+                font-semibold
+                px-6
+                py-3
+                rounded-full
+                mr-2
+                transition-all
+              "
+            >
+              Cari
             </button>
           </div>
-        </div>
 
-        {/* BOTTOM */}
-        <div className="grid grid-cols-2 gap-6">
-          {/* LEFT */}
-          <div className="bg-white p-6 rounded-2xl shadow-sm">
-            <h3 className="font-semibold mb-3">
-              Patient Transparency Initiative
-            </h3>
-
-            <ul className="space-y-2 text-sm text-gray-500">
-              <li>✔ Verified credentials</li>
-              <li>✔ Honest reviews</li>
-            </ul>
+          {/* FILTER */}
+          <div className="flex flex-wrap gap-3 mt-6 mb-8">
+            {filters.map((filter) => (
+              <button
+                key={filter}
+                onClick={() =>
+                  setActiveFilter(
+                    filter
+                  )
+                }
+                className={`
+                  px-6
+                  py-3
+                  rounded-full
+                  border
+                  font-semibold
+                  transition-all
+                  text-sm
+                  ${
+                    activeFilter ===
+                    filter
+                      ? "bg-[#FF6B6B] text-white border-[#FF6B6B]"
+                      : "bg-white text-[#5B4444] border-[#DDBBBB]"
+                  }
+                `}
+              >
+                {filter}
+              </button>
+            ))}
           </div>
 
-          {/* RIGHT */}
-          <div className="bg-white p-6 rounded-2xl shadow-sm">
-            <h3 className="font-semibold mb-4">
-              Patient Satisfaction Score
-            </h3>
+          {/* LOADING */}
+          {loading && (
+            <div className="text-center py-20 text-lg text-gray-500">
+              Loading doctors...
+            </div>
+          )}
 
-            <Progress label="Ease of booking" value={99} />
-            <Progress label="Provider punctuality" value={94} />
-            <Progress label="Clear pricing" value={97} />
+          {/* ERROR */}
+          {error && (
+            <div
+              className="
+                bg-red-50
+                border
+                border-red-200
+                text-red-500
+                px-5
+                py-4
+                rounded-2xl
+                mb-8
+              "
+            >
+              {error}
+            </div>
+          )}
+
+          {/* DOCTOR LIST */}
+          <div className="space-y-6">
+            {filteredDoctors.map(
+              (doctor) => (
+                <div
+                  key={doctor.id}
+                  className="
+                    bg-white/90
+                    border
+                    border-[#E6CACA]
+                    rounded-2xl
+                    px-8
+                    py-8
+                    flex
+                    flex-col
+                    lg:flex-row
+                    lg:items-center
+                    gap-8
+                  "
+                >
+                  {/* LEFT */}
+                  <div className="flex gap-6 flex-1">
+                    {/* IMAGE */}
+                    <div
+                      className="
+                        relative
+                        w-24
+                        h-24
+                        rounded-full
+                        overflow-hidden
+                        border-4
+                        border-[#F5DFDF]
+                        shrink-0
+                      "
+                    >
+                      <Image
+                        src={
+                          doctor.foto_profil_url ||
+                          "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?q=80&w=1200&auto=format&fit=crop"
+                        }
+                        alt={doctor.name}
+                        fill
+                        unoptimized
+                        className="object-cover"
+                      />
+                    </div>
+
+                    {/* INFO */}
+                    <div className="flex-1">
+                      <div className="flex flex-wrap items-center gap-4 mb-3">
+                        <h2
+                          className="
+                            text-2xl
+                            font-black
+                            text-[#2B1717]
+                          "
+                        >
+                          {doctor.name}
+                        </h2>
+
+                        <span
+                          className="
+                            px-4
+                            py-1.5
+                            rounded-full
+                            text-xs
+                            font-bold
+                            bg-[#7FE7DE]
+                            text-[#136F63]
+                          "
+                        >
+                          {
+                            doctor.spesialisasi
+                          }
+                        </span>
+                      </div>
+
+                      <p
+                        className="
+                          text-[#5E4A4A]
+                          leading-relaxed
+                          text-base
+                        "
+                      >
+                        {
+                          doctor.deskripsi_profil
+                        }
+                      </p>
+
+                      {/* META */}
+                      <div className="flex flex-wrap items-center gap-8 mt-5">
+                        <div
+                          className="
+                            flex
+                            items-center
+                            gap-2
+                            text-sm
+                            text-[#5B4444]
+                            font-semibold
+                          "
+                        >
+                          ⭐{" "}
+                          {doctor.rating ||
+                            "4.9"}{" "}
+                          (
+                          {doctor.reviews ||
+                            "100 Ulasan"}
+                          )
+                        </div>
+
+                        <div
+                          className="
+                            flex
+                            items-center
+                            gap-2
+                            text-sm
+                            text-[#0D7B54]
+                            font-semibold
+                          "
+                        >
+                          📅{" "}
+                          {doctor.availability ||
+                            "Tersedia"}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* BUTTON */}
+                  <div className="flex justify-end">
+                    <Link
+                      href={`/appointment/${doctor.id}`}
+                      className="
+                        bg-[#FF6B6B]
+                        hover:bg-[#f65c5c]
+                        text-white
+                        font-bold
+                        px-6
+                        py-3
+                        rounded-full
+                        shadow-lg
+                        transition-all
+                        whitespace-nowrap
+                        inline-flex
+                        items-center
+                        justify-center
+                      "
+                    >
+                      Jadwalkan →
+                    </Link>
+                  </div>
+                </div>
+              )
+            )}
           </div>
         </div>
-      </main>
-    </div>
-  );
-}
+      </section>
 
-/* COMPONENTS */
-
-function Filter({ label }: { label: string }) {
-  return (
-    <div className="bg-white px-4 py-2 rounded-xl text-sm text-gray-500 shadow-sm">
-      {label}
-    </div>
-  );
-}
-
-function DoctorCard({
-  name,
-  specialty,
-  location,
-  rating,
-  price,
-  availability,
-  image,
-}: Doctor) {
-  return (
-    <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
-      <Image
-        src={image}
-        alt={name}
-        width={400}
-        height={160}
-        className="w-full h-40 object-cover"
-      />
-
-      <div className="p-4 space-y-2">
-        <div className="flex justify-between items-center">
-          <span className="text-xs text-gray-400 uppercase">
-            {specialty}
-          </span>
-          <span className="flex items-center gap-1 text-sm">
-            <Star size={14} className="text-orange-400" />
-            {rating}
-          </span>
-        </div>
-
-        <h3 className="font-medium">{name}</h3>
-
-        <p className="text-sm text-gray-500 flex items-center gap-1">
-          <MapPin size={14} /> {location}
-        </p>
-
-        <div className="flex justify-between text-sm text-gray-500 mt-2">
-          <span>{availability}</span>
-          <span>{price}</span>
-        </div>
-
-        <button className="mt-3 w-full bg-blue-600 text-white py-2 rounded-lg flex items-center justify-center gap-2">
-          <Calendar size={16} />
-          Book Appointment
-        </button>
-      </div>
-    </div>
-  );
-}
-
-function Progress({
-  label,
-  value,
-}: {
-  label: string;
-  value: number;
-}) {
-  return (
-    <div className="mb-3 h-screen">
-      <div className="flex justify-between text-sm text-gray-500">
-        <span>{label}</span>
-        <span>{value}%</span>
-      </div>
-      <div className="h-2 bg-gray-200 rounded-full mt-1">
-        <div
-          className="h-2 bg-green-600 rounded-full"
-          style={{ width: `${value}%` }}
-        />
-      </div>
-    </div>
+      <Footer />
+    </main>
   );
 }

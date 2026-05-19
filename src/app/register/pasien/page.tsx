@@ -1,6 +1,7 @@
 "use client";
 
 import { Navbar} from '@/components';
+import { Link } from 'lucide-react';
 import { useState } from "react";
 
 export default function RegisterPasienPage() {
@@ -133,20 +134,22 @@ export default function RegisterPasienPage() {
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <button
-                  className="
-                    bg-[#ff6b6b]
-                    text-white
-                    px-8
-                    py-4
-                    rounded-full
-                    font-semibold
-                    hover:opacity-90
-                    transition
-                  "
-                >
-                  Masuk Sekarang
-                </button>
+                <Link href="/auth/login">
+                  <button
+                    className="
+                      bg-[#ff6b6b]
+                      text-white
+                      px-8
+                      py-4
+                      rounded-full
+                      font-semibold
+                      hover:opacity-90
+                      transition
+                    "
+                  >
+                    Masuk Sekarang
+                  </button>
+                </Link>
 
                 <button
                   className="

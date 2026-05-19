@@ -1,180 +1,177 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
-import { useEffect } from "react";
+import Image from "next/image";
+import { Navbar } from "@/components";
 
-export default function LandingPage() {
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("opacity-100", "translate-y-0");
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-
-    document.querySelectorAll(".fade-up").forEach((el) => {
-      observer.observe(el);
-    });
-  }, []);
-
+export default function LoginPage() {
   return (
-    <div className="bg-[#FFFBF5] text-gray-800">
-      {/* NAVBAR */}
-      <header className="sticky top-0 z-50 bg-[#FFFBF5] border-b px-8 py-4 flex justify-between items-center">
-        <h1 className="text-2xl font-black text-[#FF6B6B]">
-          PRIMA
-        </h1>
+    <main className="min-h-screen bg-[#FFFBF5] overflow-hidden relative">
+      <Navbar />
 
-        <nav className="hidden md:flex gap-8 font-semibold">
-          <Link href="#" className="text-[#FF6B6B] border-b-2 pb-1">
-            Beranda
+      {/* BG BLUR */}
+      <div className="fixed top-[-10%] left-[-5%] w-100 h-100[#FF6B6B]/10 rounded-full blur-[100px] -z-10" />
+
+      <div className="fixed bottom-[-10%] right-[-5%] w-100 h-100 bg-[#4ECDC4]/10 rounded-full blur-[100px] -z-10" />
+
+      {/* CONTENT */}
+      <div className="min-h-[calc(100vh-80px)] flex flex-col items-center justify-center px-8 py-16">
+        {/* HEADER */}
+        <div className="text-center mb-14">
+
+          <p className="text-gray-500 text-lg max-w-md leading-relaxed">
+            Pilih peranmu untuk memulai perjalanan kesehatan digital yang lebih
+            nyaman ✨
+          </p>
+        </div>
+
+        {/* CARD CONTAINER */}
+        <div className="w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* PASIEN */}
+          <Link
+            href="/login/pasien"
+            className="
+              group
+              relative
+              overflow-hidden
+              rounded-4xl
+              border
+              border-[#F0EAE0]
+              bg-white/80
+              backdrop-blur-md
+              p-10
+              shadow-sm
+              transition
+              hover:-translate-y-1
+              hover:shadow-2xl
+            "
+          >
+            {/* TOP BAR */}
+            <div className="absolute top-0 left-0 w-full h-1 bg-[#FF6B6B]" />
+
+            {/* IMAGE */}
+            <div className="w-32 h-32 mx-auto mb-8 rounded-full bg-[#FFE4E1] flex items-center justify-center">
+              <Image
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDI2xFvTK554zln5kQ92qNBxUflbSFMnWcV36kBJsF5_rmC5McM6A8j2LOoQE3MPN8_r9QAV-5apq0H-VuQulWS_5rbzIS6akBMIqVg9S0-vgLDoTQoY8p0UdZNNDPcwtDYHUdactZMLxAHDIzI7dPWdFKZZrsOlCrSQ3GbfE9B1HNucTlpJXfPghuUculwa7dNcDJDqMqqrvEbijWjdDj5yY1WL3nCz37IDYP5PjyoyfVGOv5kUqaW0PX61ShtSahKonkd35aqiZ7s"
+                alt="Pasien"
+                width={100}
+                height={100}
+                unoptimized
+                className="object-contain"
+              />
+            </div>
+
+            {/* TEXT */}
+            <div className="text-center">
+              <h2 className="text-3xl font-black text-gray-800 mb-4">
+                Masuk sebagai Pasien
+              </h2>
+
+              <p className="text-gray-500 leading-relaxed mb-8">
+                Konsultasi dengan dokter ahli, pantau rekam medis, dan akses AI
+                kesehatan yang siap bantu kapan aja.
+              </p>
+
+              <div
+                className="
+                  w-full
+                  py-4
+                  rounded-full
+                  bg-[#FF6B6B]
+                  text-white
+                  font-bold
+                  transition
+                  group-hover:scale-[1.02]
+                "
+              >
+                LANJUT SEBAGAI PASIEN
+              </div>
+            </div>
           </Link>
-          <Link href="#">Cari Dokter</Link>
-          <Link href="#">Beranda Saya</Link>
-          <Link href="#">Rekam Medis</Link>
-          <Link href="#">AI Asisten</Link>
-        </nav>
 
-        <button className="hidden md:block border px-4 py-2 rounded-full text-[#FF6B6B]">
-          Masuk
-        </button>
-      </header>
+          {/* DOKTER */}
+          <Link
+            href="/login/doctor"
+            className="
+              group
+              relative
+              overflow-hidden
+              rounded-4xl
+              border
+              border-[#F0EAE0]
+              bg-white/80
+              backdrop-blur-md
+              p-10
+              shadow-sm
+              transition
+              hover:-translate-y-1
+              hover:shadow-2xl
+            "
+          >
+            {/* TOP BAR */}
+            <div className="absolute top-0 left-0 w-full h-1 bg-[#4ECDC4]" />
 
-      {/* HERO */}
-      <section className="px-8 py-20 max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-16">
-        {/* LEFT */}
-        <div className="flex-1 space-y-6 fade-up opacity-0 translate-y-6 transition">
-          <h1 className="text-5xl font-extrabold leading-tight">
-            Jaga{" "}
-            <span className="text-[#FF6B6B]">kesehatanmu</span>, mulai dari{" "}
-            <span className="text-[#4ECDC4]">sini</span>
-          </h1>
+            {/* IMAGE */}
+            <div className="w-32 h-32 mx-auto mb-8 rounded-full bg-[#DDF5F3] flex items-center justify-center">
+              <Image
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBBvDq1IWDyCHHIWBMt-3UNg_7Ykk2EXvcJlIdhPYqYeRUzQ5JW_MhUwE1vGInBYLvY_iFzfcHJQcTddr1nFT8EXFX-3ONoodPTGaWIKu7O6IiZLdymb2QQM-0mb0GoWliXI9iSNK_-FoDxCIyXIrQleSAWxRnRDjhlMHkoqcgllU_YE03RoTXxp9EuvITTL5B7RJQ9EbHE5nv-Y1ji2i3Xs7dA3p5PRovru8TAHu6dQ84z8MsnhfiMzNdLVCNu6yaWP0bA-gm_zw5s"
+                alt="Dokter"
+                width={100}
+                height={100}
+                unoptimized
+                className="object-contain"
+              />
+            </div>
 
-          <p className="text-gray-600 max-w-md">
-            Chat dokter, tebus resep, sampai booking janji temu—
-            semua dalam satu platform.
-          </p>
+            {/* TEXT */}
+            <div className="text-center">
+              <h2 className="text-3xl font-black text-gray-800 mb-4">
+                Masuk sebagai Dokter
+              </h2>
 
-          <div className="flex gap-4">
-            <button className="bg-[#FF6B6B] text-white px-6 py-3 rounded-full">
-              Cari Dokter
-            </button>
-            <button className="border-2 border-[#FF6B6B] text-[#FF6B6B] px-6 py-3 rounded-full">
-              Tanya AI
-            </button>
+              <p className="text-gray-500 leading-relaxed mb-8">
+                Kelola konsultasi pasien, jadwal praktik, dan berikan pelayanan
+                kesehatan modern bersama PRIMA.
+              </p>
+
+              <div
+                className="
+                  w-full
+                  py-4
+                  rounded-full
+                  bg-[#4ECDC4]
+                  text-white
+                  font-bold
+                  transition
+                  group-hover:scale-[1.02]
+                "
+              >
+                LANJUT SEBAGAI DOKTER
+              </div>
+            </div>
+          </Link>
+        </div>
+
+        {/* FOOTER */}
+        <div className="mt-14 text-center">
+          <Link
+            href="/register"
+            className="font-bold text-[#FF6B6B] hover:underline"
+          >
+            Belum punya akun? Daftar di sini
+          </Link>
+
+          <div className="flex justify-center gap-6 mt-6 text-sm text-gray-400">
+            <Link href="#">Bantuan</Link>
+            <Link href="#">Privasi</Link>
+            <Link href="#">Kontak</Link>
           </div>
-        </div>
 
-        {/* RIGHT */}
-        <div className="flex-1 relative fade-up opacity-0 translate-y-6 transition">
-          <div className="absolute inset-0 bg-linear-to-br from-[#FF6B6B] to-[#4ECDC4] opacity-20 blur-3xl rounded-full"></div>
-
-          <Image
-            src="https://via.placeholder.com/400"
-            alt="hero"
-            width={400}
-            height={400}
-            className="relative z-10 rounded-3xl"
-          />
-        </div>
-      </section>
-
-      {/* PROBLEM */}
-      <section className="text-center py-20 max-w-4xl mx-auto fade-up opacity-0 translate-y-6 transition">
-        <h2 className="text-3xl font-bold mb-10">
-          Pernah ngerasa gini?
-        </h2>
-
-        <div className="space-y-6 text-left">
-          <p>
-            “Males antre lama di rumah sakit...”
-          </p>
-          <p>
-            “Resep dokter susah dibaca...”
-          </p>
-          <p>
-            “Cari info kesehatan malah overthinking...”
+          <p className="mt-8 text-sm text-gray-400">
+            © 2026 PRIMA. Playful Healthcare.
           </p>
         </div>
-      </section>
-
-      {/* FEATURES */}
-      <section className="py-20 px-8 max-w-7xl mx-auto space-y-20">
-        <Feature
-          title="Cari Dokter"
-          desc="Filter berdasarkan rating, harga, dan lokasi."
-          color="bg-[#FF6B6B]"
-        />
-
-        <Feature
-          title="AI Assistant"
-          desc="Tanya dulu sebelum ke dokter."
-          color="bg-[#4ECDC4]"
-        />
-
-        <Feature
-          title="Konsultasi Online"
-          desc="Chat, call, atau video dengan dokter."
-          color="bg-orange-400"
-        />
-      </section>
-
-      {/* CTA */}
-      <section className="px-8 py-20">
-        <div className="bg-[#FF6B6B] text-white rounded-3xl p-12 text-center">
-          <h2 className="text-3xl font-bold mb-4">
-            Mulai Sehat Bareng Kami
-          </h2>
-
-          <p className="mb-6">
-            Join ribuan user sekarang
-          </p>
-
-          <button className="bg-white text-[#FF6B6B] px-6 py-3 rounded-full">
-            Daftar
-          </button>
-        </div>
-      </section>
-
-      {/* FOOTER */}
-      <footer className="bg-white px-8 py-10 border-t">
-        <div className="flex justify-between">
-          <h3 className="font-bold text-[#FF6B6B]">
-            PRIMA
-          </h3>
-
-          <p className="text-gray-400 text-sm">
-            © 2026 PRIMA
-          </p>
-        </div>
-      </footer>
-    </div>
-  );
-}
-
-/* COMPONENT */
-function Feature({
-  title,
-  desc,
-  color,
-}: {
-  title: string;
-  desc: string;
-  color: string;
-}) {
-  return (
-    <div className="flex flex-col md:flex-row items-center gap-10 fade-up opacity-0 translate-y-6 transition">
-      <div className={`w-32 h-32 rounded-3xl ${color}`} />
-
-      <div>
-        <h3 className="text-xl font-bold">{title}</h3>
-        <p className="text-gray-500">{desc}</p>
       </div>
-    </div>
+    </main>
   );
 }

@@ -7,10 +7,10 @@ import { useState } from "react";
 import { Menu, X } from "lucide-react";
 
 const menu = [
-  { name: "Beranda", path: "/" },
+  { name: "Beranda", path: "/home" },
   { name: "Cari Dokter", path: "/directory" },
   { name: "Rekam Medis", path: "/records" },
-  { name: "AI Asisten", path: "/consultation" },
+  { name: "AI Asisten", path: "/ai-asisten" },
 ];
 
 export default function Navbar() {
