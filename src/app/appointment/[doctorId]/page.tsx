@@ -32,22 +32,6 @@ import type {
 } from "./types";
 
 /* =========================
-   DUMMY DOCTOR
-========================= */
-
-const dummyDoctors: Doctor[] = [
-  {
-    id: "1",
-    name: "Dr. Sarah Larasati",
-    spesialisasi:
-      "Spesialis Anak",
-
-    foto_profil_url:
-      "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?q=80&w=1200&auto=format&fit=crop",
-  },
-];
-
-/* =========================
    HELPERS
 ========================= */
 
@@ -130,10 +114,50 @@ export default function AppointmentPage() {
   const doctorId =
     params.doctorId as string;
   
-  const doctor = useMemo(() => {
-    return dummyDoctors.find(
-      (doc) => doc.id === doctorId
-    );
+  const [doctor, setDoctor] =
+    useState<Doctor | null>(null);
+
+  const [loadingDoctor, setLoadingDoctor] =
+    useState(true);
+
+  useEffect(() => {
+    const fetchDoctor =
+      async () => {
+        try {
+          setLoadingDoctor(true);
+
+          const response =
+            await fetch(
+              `https://backend-prima.vercel.app/doctors`
+            );
+
+          const result =
+            await response.json();
+
+          const foundDoctor =
+            result.data?.find(
+              (
+                doc: Doctor
+              ) =>
+                String(doc.id) ===
+                doctorId
+            );
+
+          if (foundDoctor) {
+            setDoctor(
+              foundDoctor
+            );
+          }
+        } catch (err) {
+          console.error(err);
+        } finally {
+          setLoadingDoctor(
+            false
+          );
+        }
+      };
+
+    fetchDoctor();
   }, [doctorId]);
 
   const [selectedDate, setSelectedDate] =
@@ -267,6 +291,22 @@ export default function AppointmentPage() {
         console.error(err);
       }
     };
+  
+  if (loadingDoctor) {
+    return (
+      <main className="min-h-screen flex items-center justify-center">
+        Loading...
+      </main>
+    );
+  }
+
+  if (!doctor) {
+    return (
+      <main className="min-h-screen flex items-center justify-center">
+        Dokter tidak ditemukan
+      </main>
+    );
+  }
 
   return (
     <main className="min-h-screen bg-[#FFFBF5] flex flex-col">
@@ -306,19 +346,15 @@ export default function AppointmentPage() {
                   overflow-hidden
                 "
               >
-                <Image
-                  src={
-                    doctor?.foto_profil_url ||
-                    ""
-                  }
-                  alt={
-                    doctor?.name ||
-                    "Doctor"
-                  }
-                  fill
-                  className="object-cover"
-                  unoptimized
-                />
+                {doctor?.foto_profil_url && (
+                  <Image
+                    src={doctor.foto_profil_url}
+                    alt={doctor.name}
+                    fill
+                    className="object-cover"
+                    unoptimized
+                  />
+                )}
               </div>
 
               <div className="text-center mt-6">

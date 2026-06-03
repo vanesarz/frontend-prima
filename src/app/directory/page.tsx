@@ -36,78 +36,6 @@ type Doctor = {
 };
 
 /* =========================
-   DUMMY DATA
-========================= */
-
-const dummyDoctors: Doctor[] = [
-  {
-    id: 1,
-
-    name: "Dr. Sarah Larasati",
-
-    spesialisasi:
-      "Spesialis Anak",
-
-    deskripsi_profil:
-      "Dokter anak yang sangat ramah dan sabar, memiliki pengalaman lebih dari 8 tahun di RS Bunda.",
-
-    rating: "4.9",
-
-    reviews: "120 Ulasan",
-
-    availability:
-      "Tersedia Hari Ini",
-
-    foto_profil_url:
-      "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?q=80&w=1200&auto=format&fit=crop",
-  },
-
-  {
-    id: 2,
-
-    name: "Dr. Budi Santoso",
-
-    spesialisasi:
-      "Dokter Umum",
-
-    deskripsi_profil:
-      "Berpengalaman menangani konsultasi kesehatan harian dan pemeriksaan medis umum.",
-
-    rating: "4.8",
-
-    reviews: "85 Ulasan",
-
-    availability:
-      "Tersedia Besok",
-
-    foto_profil_url:
-      "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?q=80&w=1200&auto=format&fit=crop",
-  },
-
-  {
-    id: 3,
-
-    name: "Dr. Maya Pradipta",
-
-    spesialisasi:
-      "Psikolog Klinis",
-
-    deskripsi_profil:
-      "Fokus pada manajemen stres, kecemasan, dan kesehatan mental dewasa muda.",
-
-    rating: "5.0",
-
-    reviews: "200+ Ulasan",
-
-    availability:
-      "Konsultasi Online",
-
-    foto_profil_url:
-      "https://images.unsplash.com/photo-1594824476967-48c8b964273f?q=80&w=1200&auto=format&fit=crop",
-  },
-];
-
-/* =========================
    FILTERS
 ========================= */
 
@@ -146,11 +74,8 @@ export default function DirectoryPage() {
      DATA
   ========================= */
 
-  const [apiDoctors, setApiDoctors] =
-    useState<Doctor[]>([]);
-
   const [doctors, setDoctors] =
-    useState<Doctor[]>(dummyDoctors);
+    useState<Doctor[]>([]);
 
   /* =========================
      FETCH API
@@ -165,6 +90,7 @@ export default function DirectoryPage() {
 
         const response = await fetch(
           "https://backend-prima.vercel.app/doctors"
+          // "http://localhost:8080/doctors"
         );
 
         const result =
@@ -176,11 +102,11 @@ export default function DirectoryPage() {
         );
 
         if (
-          Array.isArray(result) &&
-          result.length > 0
+          Array.isArray(result.data) && 
+          result.data.length > 0
         ) {
           const mappedDoctors =
-            result.map(
+            result.data.map(
               (
                 doctor: Record<
                   string,
@@ -232,17 +158,11 @@ export default function DirectoryPage() {
               })
             );
 
-          setApiDoctors(
-            mappedDoctors
-          );
-
           setDoctors(
             mappedDoctors
           );
         } else {
-          setDoctors(
-            dummyDoctors
-          );
+          setDoctors([]);
         }
       } catch (err) {
         console.error(err);
@@ -251,9 +171,7 @@ export default function DirectoryPage() {
           "Gagal mengambil data dokter"
         );
 
-        setDoctors(
-          dummyDoctors
-        );
+        setDoctors([]);
       } finally {
         setLoading(false);
       }
@@ -306,12 +224,6 @@ export default function DirectoryPage() {
               Dokter terbaik buat kamu
               🧑‍⚕️
             </h1>
-
-            <p className="mt-4 text-gray-500 text-base">
-              {apiDoctors.length > 0
-                ? "Menggunakan data dari API"
-                : "Menggunakan dummy data"}
-            </p>
           </div>
 
           {/* SEARCH */}
@@ -405,6 +317,12 @@ export default function DirectoryPage() {
           {loading && (
             <div className="text-center py-20 text-lg text-gray-500">
               Loading doctors...
+            </div>
+          )}
+
+          {!loading && filteredDoctors.length === 0 && (
+            <div className="text-center py-20 text-gray-500">
+              Tidak ada dokter ditemukan
             </div>
           )}
 

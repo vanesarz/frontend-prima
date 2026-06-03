@@ -86,7 +86,8 @@ export default function RegisterDoctorPage() {
       );
 
       const response = await fetch(
-        "https://backend-prima.vercel.app/auth/register/doctor",
+        // "https://backend-prima.vercel.app/auth/register/doctor",
+        "http://localhost:8080/auth/register/doctor",
         {
           method: "POST",
           headers: {
