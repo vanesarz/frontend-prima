@@ -11,40 +11,6 @@ import {
 
 export default function AiAsistenPage() {
   const [text, setText] = useState("");
-  const [messages, setMessages] = useState([
-    { role: "assistant", content: "Halo! Ada yang bisa aku bantu hari ini? Jangan ragu untuk menceritakan apa yang kamu rasakan." }
-  ]);
-  const [isLoading, setIsLoading] = useState(false);
-
-  // LOGIKA INTEGRASI API CHATBOT ASLI
-  const handleSendChat = async () => {
-    if (!text.trim()) return;
-
-    // 1. Tampilkan chat dari user ke layar
-    const userMessage = { role: "user", content: text };
-    setMessages((prev) => [...prev, userMessage]);
-    const currentInput = text;
-    setText(""); // Kosongkan input field
-    setIsLoading(true);
-
-    try {
-      // 2. TEMBAK API ASLINYA (INTEGRASI)
-      const response = await fetch('/api/chatbot', { 
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: currentInput }), 
-      });
-
-      const data = await response.json(); // Menangkap balasan JSON dari API
-      
-      // 3. Tampilkan balasan asli dari API ke layar
-      setMessages((prev) => [...prev, { role: "assistant", content: data.reply }]);
-    } catch (error) {
-      console.error("Gagal koneksi ke API Chatbot:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   return (
     <div className="min-h-screen bg-[#fff8f7] text-[#251818] antialiased flex flex-col">
@@ -119,7 +85,7 @@ export default function AiAsistenPage() {
                 placeholder="Ketik keluhanmu di sini..."
                 className="w-full bg-white border-2 border-[#e0bfbd] rounded-full py-3 pl-4 pr-20 focus:ring-0 focus:border-[#00b179]"
               />
-              <button onClick={handleSendChat} className="absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 bg-[#ff6b6b] text-white rounded-full flex items-center justify-center shadow-[0_4px_12px_rgba(255,107,107,0.3)]">
+              <button className="absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 bg-[#ff6b6b] text-white rounded-full flex items-center justify-center shadow-[0_4px_12px_rgba(255,107,107,0.3)]">
                 <ArrowRight className="w-5 h-5" />
               </button>
             </div>
