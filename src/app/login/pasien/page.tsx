@@ -4,8 +4,11 @@ import Link from "next/link";
 import Image from "next/image";
 import { Navbar } from "@/components";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function LoginPasienPage() {
+  const router = useRouter();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] =
     useState("");
@@ -44,11 +47,15 @@ export default function LoginPasienPage() {
 
       if (!response.ok) {
         throw new Error(
-          result.message ||
-            "Login gagal"
+          result.message || "Login gagal"
         );
       }
 
+      document.cookie = `token=${result.token}; path=/`;
+      document.cookie = `role=PATIENT; path=/`;
+
+      router.push("/");
+      
       console.log(
         "LOGIN SUCCESS:",
         result

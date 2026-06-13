@@ -4,8 +4,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { Navbar } from "@/components";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function LoginDoctorPage() {
+  const router = useRouter();
+
   const [email, setEmail] =
     useState("");
 
@@ -54,15 +57,11 @@ export default function LoginDoctorPage() {
 
       console.log(result);
 
-      // simpan token
-      localStorage.setItem(
-        "doctor_token",
-        result.token
-      );
+      document.cookie = `token=${result.token}; path=/`;
+      document.cookie = `role=DOCTOR; path=/`;
 
-      // redirect
-      window.location.href =
-        "/dashboard/doctor";
+      router.push("/dashboard");
+      
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message);
