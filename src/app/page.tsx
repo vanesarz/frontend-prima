@@ -66,7 +66,7 @@ export default function LandingPage() {
               </Link>
 
               <Link
-                href="/consultation"
+                href="/ai-asisten"
                 className="border-2 border-[#FF6B6B] text-[#FF6B6B] hover:bg-[#FFF0EE] px-6 py-3 rounded-full transition"
               >
                 ✨ Tanya AI
